@@ -95,7 +95,7 @@
  * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.15.7');
+\define('FORMINATOR_VERSION', '1.15.9');
 \define('FORMINATOR_SUI_VERSION', '2.6.0');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
