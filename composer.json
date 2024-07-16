@@ -1,6 +1,6 @@
 {
-    "name": "mralaminahamed/fluent-forms-stubs",
-    "description": "Fluent Forms function and class declaration stubs for static analysis.",
+    "name": "mralaminahamed/forminator-stubs",
+    "description": "Forminator function and class declaration stubs for static analysis.",
     "version": "1.0.0",
     "keywords": [
         "fluent-forms",
@@ -9,7 +9,7 @@
         "static analysis",
         "phpstan"
     ],
-    "homepage": "https://github.com/mralaminahamed/phpstan-fluent-forms-stubs",
+    "homepage": "https://github.com/mralaminahamed/phpstan-forminator-stubs",
     "license": "MIT",
     "require": {
         "php-stubs/wordpress-stubs": "^5.3 || ^6.0"
