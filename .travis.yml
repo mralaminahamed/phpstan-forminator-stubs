@@ -1,0 +1,39 @@
+# TravisCI configuration for mralaminahamed/phpstan-forminator-stubs
+
+language: "php"
+os:
+  - "linux"
+dist: "bionic"
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+
+php:
+  - "8.1"
+  - "8.0"
+  - "7.4"
+
+before_install:
+  - "phpenv config-rm xdebug.ini"
+  - "composer validate --strict"
+
+install:
+  - "composer update --no-interaction"
+  ## Reinstall sub-packages into /packages/
+  #- "composer update --no-interaction"
+  - |
+    LATEST="$(jq -r '."require"."forminator/forminator"' source/composer.json)"
+    wget -P source/ "https://downloads.wordpress.org/plugin/forminator.${LATEST}.zip"
+    unzip -q -d source/ "source/forminator.${LATEST}.zip"
+
+before_script:
+  - "cat ./source/forminator/forminator.php"
+
+script:
+  - "bash -x ./generate.sh"
+  - "php -l forminator-constants-stubs.php"
+  - "php -l forminator-stubs.php"
+  - "git diff --exit-code"
+  - |
+    php -r 'require "vendor/php-stubs/wordpress-stubs/wordpress-stubs.php"; require "forminator-constants-stubs.php"; require "forminator-stubs.php";'

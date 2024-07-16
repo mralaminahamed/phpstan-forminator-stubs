@@ -1,0 +1,40 @@
+{
+    "name": "mralaminahamed/fluent-forms-stubs",
+    "description": "Fluent Forms function and class declaration stubs for static analysis.",
+    "version": "1.0.0",
+    "keywords": [
+        "fluent-forms",
+        "contact-form",
+        "wordpress",
+        "static analysis",
+        "phpstan"
+    ],
+    "homepage": "https://github.com/mralaminahamed/phpstan-fluent-forms-stubs",
+    "license": "MIT",
+    "require": {
+        "php-stubs/wordpress-stubs": "^5.3 || ^6.0"
+    },
+    "require-dev": {
+        "php": "~7.1 || ~8.0",
+        "php-stubs/generator": "^0.8.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "suggest": {
+        "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan",
+        "symfony/polyfill-php73": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions"
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "php-stubs/generator": true
+        }
+    },
+    "scripts": {
+        "disabled-post-install-cmd": "@composer --working-dir=source/ update --no-interaction",
+        "disabled-post-update-cmd" : "@composer --working-dir=source/ update --no-interaction",
+        "cleanup": "git status --short --ignored | sed -n -e 's#^!! ##p' | xargs -r rm -vrf"
+    },
+    "scripts-descriptions": {
+        "cleanup": "Remove all ignored files."
+    }
+}
