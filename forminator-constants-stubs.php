@@ -95,13 +95,14 @@
  * Author URI: http://premium.wpmudev.org
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.12.1.1');
+\define('FORMINATOR_VERSION', '1.13.3');
 \define('FORMINATOR_SUI_VERSION', '2.6.0');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.21.1');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
 \define('FORMINATOR_STRIPE_PARTNER_ID', 'pp_partner_GeDaq2odDgGkDJ');
 \define('FORMINATOR_PAYPAL_LIB_VERSION', '1.14.0');
 \define('FORMINATOR_PRO', \false);
+\define('FORMINATOR_PLUGIN_BASENAME', \plugin_basename(__FILE__));
 \define('FORMINATOR_PRO_URL', 'https://premium.wpmudev.org/project/forminator-pro/');
 /**
  * Plugin Name: Forminator Simple Addon
