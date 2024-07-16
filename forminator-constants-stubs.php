@@ -8,94 +8,94 @@
 /**
  * Addon Name: Activecampaign
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Activecampaign to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_ACTIVECAMPAIGN_VERSION', '1.0');
 /**
  * Addon Name: Aweber
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Aweber to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_AWEBER_VERSION', '1.0');
 /**
  * Addon Name: Campaignmonitor
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Campaignmonitor to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_CAMPAIGNMONITOR_VERSION', '1.0');
 /**
  * Addon Name: Google Sheets
  * Version: 1.1
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms and Polls with Google Sheets to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_GOOGLESHEET_VERSION', '1.1');
 /**
  * Addon Name: Gutenberg
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Gutenberg blocks for Forminator
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_GUTENBERG_VERSION', '1.0');
 /**
  * Addon Name: HubSpot
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with HubSpot to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_HUBSPOT_VERSION', '1.0');
 /**
  * Addon Name: Mailchimp
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Mailchimp email list easily
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_MAILCHIMP_VERSION', '1.0');
 /**
  * Addon Name: Slack
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Slack to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_SLACK_VERSION', '1.1');
 /**
  * Addon Name: Trello
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Trello to get notified in real time.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_TRELLO_VERSION', '1.1');
 /**
  * Addon Name: Zapier
  * Version: 1.0
- * Plugin URI:  https://premium.wpmudev.org/
+ * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Zapier to execute various action you like
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.14.9');
+\define('FORMINATOR_VERSION', '1.14.10.1');
 \define('FORMINATOR_SUI_VERSION', '2.6.0');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
@@ -103,13 +103,13 @@
 \define('FORMINATOR_PAYPAL_LIB_VERSION', '1.14.0');
 \define('FORMINATOR_PRO', \false);
 \define('FORMINATOR_PLUGIN_BASENAME', \plugin_basename(__FILE__));
-\define('FORMINATOR_PRO_URL', 'https://premium.wpmudev.org/project/forminator-pro/');
+\define('FORMINATOR_PRO_URL', 'https://wpmudev.com/project/forminator-pro/');
 /**
  * Plugin Name: Forminator Simple Addon
  * Version: 1
  * Description: Simple Addon forminator.
  * Author: WPMU DEV
- * Author URI: http://premium.wpmudev.org
+ * Author URI: http://wpmudev.com
  * Text Domain: external_forminator
  * Domain Path: /languages/
  */
