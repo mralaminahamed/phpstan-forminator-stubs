@@ -86,8 +86,9 @@
  * Author URI: http://premium.wpmudev.org
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.1');
-\define('FORMINATOR_VERSION', '1.5.1');
+\define('FORMINATOR_VERSION', '1.5.2');
 \define('FORMINATOR_SUI_VERSION', '2.2.7');
+\define('FORMINATOR_PRO', \false);
 /**
  * Plugin Name: Forminator Simple Addon
  * Version: 1
