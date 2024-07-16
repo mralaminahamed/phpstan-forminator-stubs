@@ -34,13 +34,13 @@
 \define('FORMINATOR_ADDON_CAMPAIGNMONITOR_VERSION', '1.0');
 /**
  * Addon Name: Googlesheet
- * Version: 1.0
+ * Version: 1.1
  * Plugin URI:  https://premium.wpmudev.org/
- * Description: Integrate Forminator Custom Forms with Googlesheet to get notified in real time.
+ * Description: Integrate Forminator Custom Forms and Polls with Googlesheet to get notified in real time.
  * Author: WPMU DEV
  * Author URI: http://premium.wpmudev.org
  */
-\define('FORMINATOR_ADDON_GOOGLESHEET_VERSION', '1.0');
+\define('FORMINATOR_ADDON_GOOGLESHEET_VERSION', '1.1');
 /**
  * Addon Name: Gutenberg
  * Version: 1.0
@@ -67,7 +67,7 @@
  * Author: WPMU DEV
  * Author URI: http://premium.wpmudev.org
  */
-\define('FORMINATOR_ADDON_SLACK_VERSION', '1.0');
+\define('FORMINATOR_ADDON_SLACK_VERSION', '1.1');
 /**
  * Addon Name: Trello
  * Version: 1.0
@@ -76,7 +76,7 @@
  * Author: WPMU DEV
  * Author URI: http://premium.wpmudev.org
  */
-\define('FORMINATOR_ADDON_TRELLO_VERSION', '1.0');
+\define('FORMINATOR_ADDON_TRELLO_VERSION', '1.1');
 /**
  * Addon Name: Zapier
  * Version: 1.0
@@ -85,8 +85,8 @@
  * Author: WPMU DEV
  * Author URI: http://premium.wpmudev.org
  */
-\define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.1');
-\define('FORMINATOR_VERSION', '1.6.0.3');
+\define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
+\define('FORMINATOR_VERSION', '1.6.1');
 \define('FORMINATOR_SUI_VERSION', '2.3.11');
 \define('FORMINATOR_PRO', \false);
 /**
