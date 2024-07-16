@@ -33,10 +33,10 @@
  */
 \define('FORMINATOR_ADDON_CAMPAIGNMONITOR_VERSION', '1.0');
 /**
- * Addon Name: Googlesheet
+ * Addon Name: Google Sheets
  * Version: 1.1
  * Plugin URI:  https://premium.wpmudev.org/
- * Description: Integrate Forminator Custom Forms and Polls with Googlesheet to get notified in real time.
+ * Description: Integrate Forminator Custom Forms and Polls with Google Sheets to get notified in real time.
  * Author: WPMU DEV
  * Author URI: http://premium.wpmudev.org
  */
@@ -86,8 +86,9 @@
  * Author URI: http://premium.wpmudev.org
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.6.3');
-\define('FORMINATOR_SUI_VERSION', '2.3.22');
+\define('FORMINATOR_VERSION', '1.7.0');
+\define('FORMINATOR_SUI_VERSION', '2.3.23');
+\define('FORMINATOR_STRIPE_LIB_VERSION', '6.28.0');
 \define('FORMINATOR_PRO', \false);
 /**
  * Plugin Name: Forminator Simple Addon
