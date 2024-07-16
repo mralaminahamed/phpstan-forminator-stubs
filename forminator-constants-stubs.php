@@ -69,6 +69,15 @@
  */
 \define('FORMINATOR_ADDON_MAILCHIMP_VERSION', '1.0');
 /**
+ * Addon Name: Mailjet
+ * Version: 1.0
+ * Plugin URI:  https://wpmudev.com/
+ * Description: Integrate Forminator Modules with Mailjet email list easily
+ * Author: WPMU DEV
+ * Author URI: http://wpmudev.com
+ */
+\define('FORMINATOR_ADDON_MAILJET_VERSION', '1.0');
+/**
  * Addon Name: Slack
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
@@ -95,8 +104,8 @@
  * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
-\define('FORMINATOR_VERSION', '1.27.0');
-\define('FORMINATOR_SUI_VERSION', '2.12.16');
+\define('FORMINATOR_VERSION', '1.28.0');
+\define('FORMINATOR_SUI_VERSION', '2.12.23');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
 \define('FORMINATOR_STRIPE_PARTNER_ID', 'pp_partner_GeDaq2odDgGkDJ');
