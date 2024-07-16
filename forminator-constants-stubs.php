@@ -86,7 +86,7 @@
  * Author URI: http://premium.wpmudev.org
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.7.0');
+\define('FORMINATOR_VERSION', '1.7.0.1');
 \define('FORMINATOR_SUI_VERSION', '2.3.23');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '6.28.0');
 \define('FORMINATOR_PRO', \false);
