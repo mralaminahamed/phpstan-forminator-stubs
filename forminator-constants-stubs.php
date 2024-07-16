@@ -51,6 +51,15 @@
  */
 \define('FORMINATOR_ADDON_GUTENBERG_VERSION', '1.0');
 /**
+ * Addon Name: HubSpot
+ * Version: 1.0
+ * Plugin URI:  https://premium.wpmudev.org/
+ * Description: Integrate Forminator Custom Forms with HubSpot to get notified in real time.
+ * Author: WPMU DEV
+ * Author URI: http://premium.wpmudev.org
+ */
+\define('FORMINATOR_ADDON_HUBSPOT_VERSION', '1.0');
+/**
  * Addon Name: Mailchimp
  * Version: 1.0
  * Plugin URI:  https://premium.wpmudev.org/
@@ -86,7 +95,7 @@
  * Author URI: http://premium.wpmudev.org
  */
 \define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.7.1.3');
+\define('FORMINATOR_VERSION', '1.8.1');
 \define('FORMINATOR_SUI_VERSION', '2.3.29');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '6.31.5');
 \define('FORMINATOR_PAYPAL_LIB_VERSION', '1.14.0');
