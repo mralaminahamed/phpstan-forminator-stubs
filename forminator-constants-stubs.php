@@ -87,16 +87,16 @@
  */
 \define('FORMINATOR_ADDON_TRELLO_VERSION', '1.1');
 /**
- * Addon Name: Zapier
+ * Addon Name: Webhook
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
- * Description: Integrate Forminator Custom Forms with Zapier to execute various action you like
+ * Description: Integrate Forminator Custom Forms with Webhook to execute various action you like
  * Author: WPMU DEV
  * Author URI: http://wpmudev.com
  */
-\define('FORMINATOR_ADDON_ZAPIER_VERSION', '1.2');
-\define('FORMINATOR_VERSION', '1.17.2');
-\define('FORMINATOR_SUI_VERSION', '2.12.10');
+\define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
+\define('FORMINATOR_VERSION', '1.18.1');
+\define('FORMINATOR_SUI_VERSION', '2.12.11');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
 \define('FORMINATOR_STRIPE_PARTNER_ID', 'pp_partner_GeDaq2odDgGkDJ');
