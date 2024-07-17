@@ -11,8 +11,7 @@ git reset --hard origin/main
 WC_JSON="$(wget -q -O- "https://api.wordpress.org/plugins/info/1.0/forminator.json")"
 
 # Prepare output file.
-OUTPUT_FILE="forminator_versions.txt"
-> "$OUTPUT_FILE"
+OUTPUT_FILE="forminator_versions.txt" > "$OUTPUT_FILE"
 
 # Extract and filter versions, excluding "trunk".
 VERSIONS=$(jq -r '."versions" | keys[]' <<<"$WC_JSON" | grep -v "trunk" | sort -V)
@@ -54,7 +53,7 @@ while IFS= read -r VERSION; do
         # Commit and tag the new version.
         echo "Tagging version ${VERSION}..."
         git add .
-        git commit --all -m "Generate stubs for Fluent Forms ${VERSION}"
+        git commit --all -m "Generate stubs for Forminator ${VERSION}"
         git tag "v${VERSION}"
     fi
 

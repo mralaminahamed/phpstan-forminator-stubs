@@ -7,20 +7,23 @@ on:
       - "release-latest-versions.sh"
       - ".github/workflows/release.yml"
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 * * * *'  # Run every hour
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
-  relase-new-stubs:
+  release-new-stubs:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all tags and branches
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          extensions: json zip xdebug
+          php-version: '8.1'  # Specify PHP version
+          extensions: json, zip, xdebug
           coverage: none
           tools: composer
 
@@ -32,37 +35,59 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: "${{ runner.os }}-${{ hashFiles('**/composer.lock') }}"
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-suggest --no-progress --no-interaction --ignore-platform-reqs
+        run: composer install --prefer-dist --no-progress --no-interaction --ignore-platform-reqs
 
       - name: Set up Git user
         run: |
-          git config user.name 'github-actions'
-          git config user.email 'github-actions@github.com'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
       - name: Release new stubs from latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          # Add error handling
+          set -e
           bash release-latest-versions.sh
+          # Check if any errors occurred during script execution
+          if [ $? -ne 0 ]; then
+            echo "Error occurred during stub generation"
+            exit 1
+          fi
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git add .
+          git commit -m "Generate stubs from latest version" || echo "No changes to commit"
 
       - name: Push changes
+        if: steps.git-check.outputs.changes == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
-          git push origin main
-          git push origin --tags
+          git push origin HEAD:main
+          git push --tags --force
 
       - name: Create Pull Request
+        if: steps.git-check.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
           commit-message: Generate stubs from latest version
           committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
+          branch: update-plugin-stubs
           delete-branch: true
           title: 'Generate stubs from latest version'
           body: |
@@ -75,5 +100,9 @@ jobs:
           draft: false
 
       - name: Check Output
-        run: |
-          echo "Pull Request created successfully!"
+        if: steps.git-check.outputs.changes == 'true'
+        run: echo "Pull Request created successfully!"
+
+      - name: No changes detected
+        if: steps.git-check.outputs.changes != 'true'
+        run: echo "No changes detected. Skipping PR creation."
