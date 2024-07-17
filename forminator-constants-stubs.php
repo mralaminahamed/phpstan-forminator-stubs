@@ -104,7 +104,7 @@
  * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
-\define('FORMINATOR_VERSION', '1.29.2');
+\define('FORMINATOR_VERSION', '1.29.3');
 \define('FORMINATOR_SUI_VERSION', '2.12.23');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
