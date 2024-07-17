@@ -69,6 +69,15 @@
  */
 \define('FORMINATOR_ADDON_MAILCHIMP_VERSION', '1.0');
 /**
+ * Addon Name: MailerLite
+ * Version: 1.0
+ * Plugin URI:  https://wpmudev.com/
+ * Description: Integrate Forminator Custom Forms with MailerLite to get notified in real time.
+ * Author: WPMU DEV
+ * Author URI: http://wpmudev.com
+ */
+\define('FORMINATOR_ADDON_MAILERLITE_VERSION', '1.0');
+/**
  * Addon Name: Mailjet
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
@@ -104,7 +113,7 @@
  * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
-\define('FORMINATOR_VERSION', '1.29.3');
+\define('FORMINATOR_VERSION', '1.30.2');
 \define('FORMINATOR_SUI_VERSION', '2.12.23');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
