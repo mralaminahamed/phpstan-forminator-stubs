@@ -6,7 +6,7 @@
  */
 
 /**
- * Addon Name: Activecampaign
+ * Integration Name: Activecampaign
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Activecampaign to get notified in real time.
@@ -15,7 +15,7 @@
  */
 \define('FORMINATOR_ADDON_ACTIVECAMPAIGN_VERSION', '1.0');
 /**
- * Addon Name: Aweber
+ * Integration Name: Aweber
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Aweber to get notified in real time.
@@ -24,7 +24,7 @@
  */
 \define('FORMINATOR_ADDON_AWEBER_VERSION', '1.0');
 /**
- * Addon Name: Campaignmonitor
+ * Integration Name: Campaignmonitor
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Campaignmonitor to get notified in real time.
@@ -33,7 +33,7 @@
  */
 \define('FORMINATOR_ADDON_CAMPAIGNMONITOR_VERSION', '1.0');
 /**
- * Addon Name: Google Sheets
+ * Integration Name: Google Sheets
  * Version: 1.1
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms and Polls with Google Sheets to get notified in real time.
@@ -42,7 +42,7 @@
  */
 \define('FORMINATOR_ADDON_GOOGLESHEET_VERSION', '1.1');
 /**
- * Addon Name: Gutenberg
+ * Integration Name: Gutenberg
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Gutenberg blocks for Forminator
@@ -51,7 +51,7 @@
  */
 \define('FORMINATOR_ADDON_GUTENBERG_VERSION', '1.0');
 /**
- * Addon Name: HubSpot
+ * Integration Name: HubSpot
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with HubSpot to get notified in real time.
@@ -60,7 +60,7 @@
  */
 \define('FORMINATOR_ADDON_HUBSPOT_VERSION', '1.0');
 /**
- * Addon Name: Mailchimp
+ * Integration Name: Mailchimp
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Mailchimp email list easily
@@ -69,7 +69,7 @@
  */
 \define('FORMINATOR_ADDON_MAILCHIMP_VERSION', '1.0');
 /**
- * Addon Name: MailerLite
+ * Integration Name: MailerLite
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with MailerLite to get notified in real time.
@@ -78,7 +78,7 @@
  */
 \define('FORMINATOR_ADDON_MAILERLITE_VERSION', '1.0');
 /**
- * Addon Name: Mailjet
+ * Integration Name: Mailjet
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Modules with Mailjet email list easily
@@ -87,7 +87,7 @@
  */
 \define('FORMINATOR_ADDON_MAILJET_VERSION', '1.0');
 /**
- * Addon Name: Slack
+ * Integration Name: Slack
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Slack to get notified in real time.
@@ -96,7 +96,7 @@
  */
 \define('FORMINATOR_ADDON_SLACK_VERSION', '1.1');
 /**
- * Addon Name: Trello
+ * Integration Name: Trello
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Trello to get notified in real time.
@@ -105,7 +105,7 @@
  */
 \define('FORMINATOR_ADDON_TRELLO_VERSION', '1.1');
 /**
- * Addon Name: Webhook
+ * Integration Name: Webhook
  * Version: 1.0
  * Plugin URI:  https://wpmudev.com/
  * Description: Integrate Forminator Custom Forms with Webhook to execute various action you like
@@ -113,10 +113,10 @@
  * Author URI: http://wpmudev.com
  */
 \define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
-\define('FORMINATOR_VERSION', '1.30.2');
+\define('FORMINATOR_VERSION', '1.31.0');
 \define('FORMINATOR_SUI_VERSION', '2.12.23');
-\define('FORMINATOR_STRIPE_LIB_VERSION', '7.67.0');
-\define('FORMINATOR_STRIPE_LIB_DATE', '2019-12-03');
+\define('FORMINATOR_STRIPE_LIB_VERSION', '14.6.0');
+\define('FORMINATOR_STRIPE_LIB_DATE', '2024-04-10');
 \define('FORMINATOR_STRIPE_PARTNER_ID', 'pp_partner_GeDaq2odDgGkDJ');
 \define('FORMINATOR_PAYPAL_LIB_VERSION', '1.14.0');
 \define('FORMINATOR_PRO', \false);
