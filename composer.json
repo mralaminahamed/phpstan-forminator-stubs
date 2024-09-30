@@ -32,7 +32,9 @@
     "scripts": {
         "disabled-post-install-cmd": "@composer --working-dir=source/ update --no-interaction",
         "disabled-post-update-cmd" : "@composer --working-dir=source/ update --no-interaction",
-        "cleanup": "git status --short --ignored | sed -n -e 's#^!! ##p' | xargs -r rm -vrf"
+        "cleanup": "git status --short --ignored | sed -n -e 's#^!! ##p' | xargs -r rm -vrf",
+        "release": "bash release-all-versions.sh",
+        "release:latest": "bash release-latest-versions.sh"
     },
     "scripts-descriptions": {
         "cleanup": "Remove all ignored files."
