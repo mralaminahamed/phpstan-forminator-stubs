@@ -1,8 +1,8 @@
 parameters:
     paths:
-        - forminator-stubs.php
+        - forminator-stubs.stub
     scanFiles:
-        - forminator-constants-stubs.php
+        - forminator-constants-stubs.stub
     bootstrapFiles:
         - bootstrap.php
     level: 5

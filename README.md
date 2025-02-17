@@ -25,7 +25,7 @@ Require this package as a development dependency with [Composer](https://getcomp
 composer require --dev mralaminahamed/forminator-stubs
 ```
 
-Alternatively you may download `forminator-stubs.php` directly.
+Alternatively you may download `forminator-stubs.stub` directly.
 
 ## Usage in PHPStan
 
@@ -34,6 +34,6 @@ Include stubs in PHPStan configuration file.
 ```yaml
 parameters:
     bootstrapFiles:
-        - vendor/mralaminahamed/forminator-stubs/forminator-constants-stubs.php
-        - vendor/mralaminahamed/forminator-stubs/forminator-stubs.php
+        - vendor/mralaminahamed/forminator-stubs/forminator-constants-stubs.stub
+        - vendor/mralaminahamed/forminator-stubs/forminator-stubs.stub
 ```

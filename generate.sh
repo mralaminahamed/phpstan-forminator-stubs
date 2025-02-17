@@ -5,8 +5,8 @@
 
 HEADER=$'/**\n * Generated stub declarations for Forminator.\n * @see https://forminator.com/\n * @see https://github.com/mralaminahamed/phpstan-forminator-stubs\n */'
 
-FILE="forminator-stubs.php"
-FILE_CONSTANTS="forminator-constants-stubs.php"
+FILE="forminator-stubs.stub"
+FILE_CONSTANTS="forminator-constants-stubs.stub"
 
 set -e
 
