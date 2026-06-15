@@ -1,11 +1,13 @@
 <?php
 
-return \StubsGenerator\Finder::create()
+use StubsGenerator\Finder;
+
+return Finder::create()
     ->in( array(
         'source/forminator',
     ) )
     ->append(
-        \StubsGenerator\Finder::create()
+        Finder::create()
             ->in(['source/forminator'])
             ->files()
             ->depth('< 1')
