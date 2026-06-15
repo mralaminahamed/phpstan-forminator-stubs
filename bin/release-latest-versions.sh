@@ -33,10 +33,11 @@ while IFS= read -r VERSION; do
         continue
     fi
 
-    find "$ROOT_DIR/source/" -mindepth 1 ! -name 'composer.json' ! -name '.gitignore' -exec rm -rf {} +
+    rm -rf "$ROOT_DIR/source/forminator" 2>/dev/null || true
+    rm -f "$ROOT_DIR/source/forminator."*.zip 2>/dev/null || true
 
-    wget -P "$ROOT_DIR/source/" "https://downloads.wordpress.org/plugin/forminator.${VERSION}.zip"
-    unzip -q -d "$ROOT_DIR/source/" "$ROOT_DIR/source/forminator.${VERSION}.zip"
+    wget -q -P "$ROOT_DIR/source/" "https://downloads.wordpress.org/plugin/forminator.${VERSION}.zip"
+    unzip -q -o -d "$ROOT_DIR/source/" "$ROOT_DIR/source/forminator.${VERSION}.zip"
 
     echo "Generating stubs for version ${VERSION}..."
     "$SCRIPT_DIR/generate.sh"
@@ -49,7 +50,8 @@ while IFS= read -r VERSION; do
         git -C "$ROOT_DIR" tag "v${VERSION}"
     fi
 
-    find "$ROOT_DIR/source/" -mindepth 1 ! -name 'composer.json' ! -name '.gitignore' -exec rm -rf {} +
+    rm -rf "$ROOT_DIR/source/forminator" 2>/dev/null || true
+    rm -f "$ROOT_DIR/source/forminator."*.zip 2>/dev/null || true
 done < "$OUTPUT_FILE"
 
 echo "All versions processed."
