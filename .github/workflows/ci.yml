@@ -19,8 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The floor this package declares, and current stable. Consumers sit on both.
-        php: ['7.4', '8.3']
+        # 8.0 is this package's floor, not 7.4: the generated stubs use constructor property
+        # promotion, which 7.4 cannot parse. composer.json said >=7.4 and was wrong.
+        php: ['8.0', '8.3']
 
     steps:
       - uses: actions/checkout@v5
