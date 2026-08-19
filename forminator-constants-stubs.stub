@@ -141,7 +141,7 @@
  * @package Forminator
  */
 \define('FORMINATOR_ADDON_WEBHOOK_VERSION', '1.0');
-\define('FORMINATOR_VERSION', '1.57.0.4');
+\define('FORMINATOR_VERSION', '1.57.0.5');
 \define('FORMINATOR_SUI_VERSION', '2.12.27');
 \define('FORMINATOR_STRIPE_LIB_VERSION', '19.4.0');
 \define('FORMINATOR_STRIPE_LIB_DATE', '2024-04-10');
@@ -151,6 +151,420 @@
 \define('FORMINATOR_PRO_URL', 'https://wpmudev.com/project/forminator-pro/');
 \define('FORMINATOR_MIN_PHP_VERSION', '7.4');
 \define('FORMINATOR_PLUGIN_BASENAME', \plugin_basename(__FILE__));
+/**
+ * Pure-PHP implementations of keyed-hash message authentication codes (HMACs) and various cryptographic hashing functions.
+ *
+ * Uses hash() or mhash() if available and an internal implementation, otherwise.  Currently supports the following:
+ *
+ * md2, md5, md5-96, sha1, sha1-96, sha256, sha256-96, sha384, and sha512, sha512-96
+ *
+ * If {@link self::setKey() setKey()} is called, {@link self::hash() hash()} will return the HMAC as opposed to
+ * the hash.  If no valid algorithm is provided, sha1 will be used.
+ *
+ * PHP versions 4 and 5
+ *
+ * {@internal The variable names are the same as those in
+ * {@link http://tools.ietf.org/html/rfc2104#section-2 RFC2104}.}}
+ *
+ * Here's a short example of how to use this library:
+ * <code>
+ * <?php
+ *    include 'Crypt/Hash.php';
+ *
+ *    $hash = new Crypt_Hash('sha1');
+ *
+ *    $hash->setKey('abcdefg');
+ *
+ *    echo base64_encode($hash->hash('abcdefg'));
+ * ?>
+ * </code>
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @category  Crypt
+ * @package   Crypt_Hash
+ * @author    Jim Wigginton <terrafrost@php.net>
+ * @copyright 2007 Jim Wigginton
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @link      http://phpseclib.sourceforge.net
+ */
+/**#@+
+ * @access private
+ * @see self::Crypt_Hash()
+ */
+/**
+ * Toggles the internal implementation
+ */
+\define('CRYPT_HASH_MODE_INTERNAL', 1);
+/**
+ * Toggles the mhash() implementation, which has been deprecated on PHP 5.3.0+.
+ */
+\define('CRYPT_HASH_MODE_MHASH', 2);
+/**
+ * Toggles the hash() implementation, which works on PHP 5.1.2+.
+ */
+\define('CRYPT_HASH_MODE_HASH', 3);
+/**#@+
+ * @access public
+ * @see self::encrypt()
+ * @see self::decrypt()
+ */
+/**
+ * Use {@link http://en.wikipedia.org/wiki/Optimal_Asymmetric_Encryption_Padding Optimal Asymmetric Encryption Padding}
+ * (OAEP) for encryption / decryption.
+ *
+ * Uses sha1 by default.
+ *
+ * @see self::setHash()
+ * @see self::setMGFHash()
+ */
+\define('CRYPT_RSA_ENCRYPTION_OAEP', 1);
+/**
+ * Use PKCS#1 padding.
+ *
+ * Although CRYPT_RSA_ENCRYPTION_OAEP offers more security, including PKCS#1 padding is necessary for purposes of backwards
+ * compatibility with protocols (like SSH-1) written before OAEP's introduction.
+ */
+\define('CRYPT_RSA_ENCRYPTION_PKCS1', 2);
+/**
+ * Do not use any padding
+ *
+ * Although this method is not recommended it can none-the-less sometimes be useful if you're trying to decrypt some legacy
+ * stuff, if you're trying to diagnose why an encrypted message isn't decrypting, etc.
+ */
+\define('CRYPT_RSA_ENCRYPTION_NONE', 3);
+/**#@-*/
+/**#@+
+ * @access public
+ * @see self::sign()
+ * @see self::verify()
+ * @see self::setHash()
+ */
+/**
+ * Use the Probabilistic Signature Scheme for signing
+ *
+ * Uses sha1 by default.
+ *
+ * @see self::setSaltLength()
+ * @see self::setMGFHash()
+ */
+\define('CRYPT_RSA_SIGNATURE_PSS', 1);
+/**
+ * Use the PKCS#1 scheme by default.
+ *
+ * Although CRYPT_RSA_SIGNATURE_PSS offers more security, including PKCS#1 signing is necessary for purposes of backwards
+ * compatibility with protocols (like SSH-2) written before PSS's introduction.
+ */
+\define('CRYPT_RSA_SIGNATURE_PKCS1', 2);
+/**#@-*/
+/**#@+
+ * @access private
+ * @see self::createKey()
+ */
+/**
+ * ASN1 Integer
+ */
+\define('CRYPT_RSA_ASN1_INTEGER', 2);
+/**
+ * ASN1 Bit String
+ */
+\define('CRYPT_RSA_ASN1_BITSTRING', 3);
+/**
+ * ASN1 Octet String
+ */
+\define('CRYPT_RSA_ASN1_OCTETSTRING', 4);
+/**
+ * ASN1 Object Identifier
+ */
+\define('CRYPT_RSA_ASN1_OBJECT', 6);
+/**
+ * ASN1 Sequence (with the constucted bit set)
+ */
+\define('CRYPT_RSA_ASN1_SEQUENCE', 48);
+/**#@-*/
+/**#@+
+ * @access private
+ * @see self::Crypt_RSA()
+ */
+/**
+ * To use the pure-PHP implementation
+ */
+\define('CRYPT_RSA_MODE_INTERNAL', 1);
+/**
+ * To use the OpenSSL library
+ *
+ * (if enabled; otherwise, the internal implementation will be used)
+ */
+\define('CRYPT_RSA_MODE_OPENSSL', 2);
+/**#@-*/
+/**
+ * Default openSSL configuration file.
+ */
+\define('CRYPT_RSA_OPENSSL_CONFIG', \dirname(__FILE__) . '/../openssl.cnf');
+/**#@+
+ * @access public
+ * @see self::createKey()
+ * @see self::setPrivateKeyFormat()
+ */
+/**
+ * PKCS#1 formatted private key
+ *
+ * Used by OpenSSH
+ */
+\define('CRYPT_RSA_PRIVATE_FORMAT_PKCS1', 0);
+/**
+ * PuTTY formatted private key
+ */
+\define('CRYPT_RSA_PRIVATE_FORMAT_PUTTY', 1);
+/**
+ * XML formatted private key
+ */
+\define('CRYPT_RSA_PRIVATE_FORMAT_XML', 2);
+/**
+ * PKCS#8 formatted private key
+ */
+\define('CRYPT_RSA_PRIVATE_FORMAT_PKCS8', 8);
+/**
+ * OpenSSH formatted private key
+ */
+\define('CRYPT_RSA_PRIVATE_FORMAT_OPENSSH', 9);
+/**#@-*/
+/**#@+
+ * @access public
+ * @see self::createKey()
+ * @see self::setPublicKeyFormat()
+ */
+/**
+ * Raw public key
+ *
+ * An array containing two Math_BigInteger objects.
+ *
+ * The exponent can be indexed with any of the following:
+ *
+ * 0, e, exponent, publicExponent
+ *
+ * The modulus can be indexed with any of the following:
+ *
+ * 1, n, modulo, modulus
+ */
+\define('CRYPT_RSA_PUBLIC_FORMAT_RAW', 3);
+/**
+ * PKCS#1 formatted public key (raw)
+ *
+ * Used by File/X509.php
+ *
+ * Has the following header:
+ *
+ * -----BEGIN RSA PUBLIC KEY-----
+ *
+ * Analogous to ssh-keygen's pem format (as specified by -m)
+ */
+\define('CRYPT_RSA_PUBLIC_FORMAT_PKCS1', 4);
+\define('CRYPT_RSA_PUBLIC_FORMAT_PKCS1_RAW', 4);
+/**
+ * XML formatted public key
+ */
+\define('CRYPT_RSA_PUBLIC_FORMAT_XML', 5);
+/**
+ * OpenSSH formatted public key
+ *
+ * Place in $HOME/.ssh/authorized_keys
+ */
+\define('CRYPT_RSA_PUBLIC_FORMAT_OPENSSH', 6);
+/**
+ * PKCS#1 formatted public key (encapsulated)
+ *
+ * Used by PHP's openssl_public_encrypt() and openssl's rsautl (when -pubin is set)
+ *
+ * Has the following header:
+ *
+ * -----BEGIN PUBLIC KEY-----
+ *
+ * Analogous to ssh-keygen's pkcs8 format (as specified by -m). Although PKCS8
+ * is specific to private keys it's basically creating a DER-encoded wrapper
+ * for keys. This just extends that same concept to public keys (much like ssh-keygen)
+ */
+\define('CRYPT_RSA_PUBLIC_FORMAT_PKCS8', 7);
+/**
+ * "Is Windows" test
+ *
+ * @access private
+ */
+\define('CRYPT_RANDOM_IS_WINDOWS', \strtoupper(\substr(\PHP_OS, 0, 3)) === 'WIN');
+/**
+ * Pure-PHP arbitrary precision integer arithmetic library.
+ *
+ * Supports base-2, base-10, base-16, and base-256 numbers.  Uses the GMP or BCMath extensions, if available,
+ * and an internal implementation, otherwise.
+ *
+ * PHP versions 4 and 5
+ *
+ * {@internal (all DocBlock comments regarding implementation - such as the one that follows - refer to the
+ * {@link MATH_BIGINTEGER_MODE_INTERNAL MATH_BIGINTEGER_MODE_INTERNAL} mode)
+ *
+ * Math_BigInteger uses base-2**26 to perform operations such as multiplication and division and
+ * base-2**52 (ie. two base 2**26 digits) to perform addition and subtraction.  Because the largest possible
+ * value when multiplying two base-2**26 numbers together is a base-2**52 number, double precision floating
+ * point numbers - numbers that should be supported on most hardware and whose significand is 53 bits - are
+ * used.  As a consequence, bitwise operators such as >> and << cannot be used, nor can the modulo operator %,
+ * which only supports integers.  Although this fact will slow this library down, the fact that such a high
+ * base is being used should more than compensate.
+ *
+ * Numbers are stored in {@link http://en.wikipedia.org/wiki/Endianness little endian} format.  ie.
+ * (new Math_BigInteger(pow(2, 26)))->value = array(0, 1)
+ *
+ * Useful resources are as follows:
+ *
+ *  - {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf Handbook of Applied Cryptography (HAC)}
+ *  - {@link http://math.libtomcrypt.com/files/tommath.pdf Multi-Precision Math (MPM)}
+ *  - Java's BigInteger classes.  See /j2se/src/share/classes/java/math in jdk-1_5_0-src-jrl.zip
+ *
+ * Here's an example of how to use this library:
+ * <code>
+ * <?php
+ *    include 'Math/BigInteger.php';
+ *
+ *    $a = new Math_BigInteger(2);
+ *    $b = new Math_BigInteger(3);
+ *
+ *    $c = $a->add($b);
+ *
+ *    echo $c->toString(); // outputs 5
+ * ?>
+ * </code>
+ *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @category  Math
+ * @package   Math_BigInteger
+ * @author    Jim Wigginton <terrafrost@php.net>
+ * @copyright 2006 Jim Wigginton
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
+/**#@+
+ * Reduction constants
+ *
+ * @access private
+ * @see self::_reduce()
+ */
+/**
+ * @see self::_montgomery()
+ * @see self::_prepMontgomery()
+ */
+\define('MATH_BIGINTEGER_MONTGOMERY', 0);
+/**
+ * @see self::_barrett()
+ */
+\define('MATH_BIGINTEGER_BARRETT', 1);
+/**
+ * @see self::_mod2()
+ */
+\define('MATH_BIGINTEGER_POWEROF2', 2);
+/**
+ * @see self::_remainder()
+ */
+\define('MATH_BIGINTEGER_CLASSIC', 3);
+/**
+ * @see self::__clone()
+ */
+\define('MATH_BIGINTEGER_NONE', 4);
+/**#@-*/
+/**#@+
+ * Array constants
+ *
+ * Rather than create a thousands and thousands of new Math_BigInteger objects in repeated function calls to add() and
+ * multiply() or whatever, we'll just work directly on arrays, taking them in as parameters and returning them.
+ *
+ * @access private
+ */
+/**
+ * $result[MATH_BIGINTEGER_VALUE] contains the value.
+ */
+\define('MATH_BIGINTEGER_VALUE', 0);
+/**
+ * $result[MATH_BIGINTEGER_SIGN] contains the sign.
+ */
+\define('MATH_BIGINTEGER_SIGN', 1);
+/**#@-*/
+/**#@+
+ * @access private
+ * @see self::_montgomery()
+ * @see self::_barrett()
+ */
+/**
+ * Cache constants
+ *
+ * $cache[MATH_BIGINTEGER_VARIABLE] tells us whether or not the cached data is still valid.
+ */
+\define('MATH_BIGINTEGER_VARIABLE', 0);
+/**
+ * $cache[MATH_BIGINTEGER_DATA] contains the cached data.
+ */
+\define('MATH_BIGINTEGER_DATA', 1);
+/**#@-*/
+/**#@+
+ * Mode constants.
+ *
+ * @access private
+ * @see self::Math_BigInteger()
+ */
+/**
+ * To use the pure-PHP implementation
+ */
+\define('MATH_BIGINTEGER_MODE_INTERNAL', 1);
+/**
+ * To use the BCMath library
+ *
+ * (if enabled; otherwise, the internal implementation will be used)
+ */
+\define('MATH_BIGINTEGER_MODE_BCMATH', 2);
+/**
+ * To use the GMP library
+ *
+ * (if present; otherwise, either the BCMath or the internal implementation will be used)
+ */
+\define('MATH_BIGINTEGER_MODE_GMP', 3);
+/**#@-*/
+/**
+ * Karatsuba Cutoff
+ *
+ * At what point do we switch between Karatsuba multiplication and schoolbook long multiplication?
+ *
+ * @access private
+ */
+\define('MATH_BIGINTEGER_KARATSUBA_CUTOFF', 25);
 /**
  * Plugin Name: Forminator Simple Addon
  * Version: 1
