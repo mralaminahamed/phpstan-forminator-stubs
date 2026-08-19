@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "php-stubs/wordpress-stubs": "^5.3 || ^6.0"
     },
     "require-dev": {
@@ -48,7 +48,7 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "platform": {
-            "php": "7.4.0"
+            "php": "8.0.0"
         }
     },
     "scripts": {
