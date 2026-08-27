@@ -155273,6 +155273,33 @@ namespace {
     {
     }
     /**
+     * Unserialize data without instantiating PHP objects.
+     *
+     * Entry meta and similar visitor-influenced values must not use maybe_unserialize(),
+     * which allows arbitrary class instantiation (PHP Object Injection).
+     *
+     * @since 1.57.2
+     *
+     * @param mixed $data Data that might be serialized.
+     * @return mixed Unserialized data with objects blocked, the original value if not serialized, or false on failure / rejected object payloads.
+     */
+    function forminator_safe_maybe_unserialize($data)
+    {
+    }
+    /**
+     * Replace __PHP_Incomplete_Class instances with an empty string.
+     *
+     * Produced when unserialize() encounters disallowed classes.
+     *
+     * @since 1.57.2
+     *
+     * @param mixed $value Value that may contain incomplete class instances.
+     * @return mixed Value with incomplete classes removed.
+     */
+    function forminator_strip_incomplete_classes($value)
+    {
+    }
+    /**
      * Currency list
      *
      * @return mixed
