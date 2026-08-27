@@ -124238,6 +124238,84 @@ namespace {
          */
         public const CHECKOUT_SESSION_UPLOADED_FILES = 'forminator_uploaded_files_on_checkout_sessions';
         /**
+         * Option key prefix for Checkout Session IDs that already produced an entry.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const CONSUMED_CHECKOUT_SESSION_OPTION_PREFIX = 'forminator_stripe_consumed_checkout_session_';
+        /**
+         * Option key for consumed Checkout Session IDs tracked for cleanup.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const CONSUMED_CHECKOUT_SESSION_CLEANUP_OPTION_KEY = 'forminator_stripe_consumed_checkout_session_cleanup';
+        /**
+         * Option key prefix for individual pending PaymentIntent IDs.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const PAYMENT_INTENT_OPTION_PREFIX = 'forminator_stripe_payment_intent_';
+        /**
+         * Option key for pending PaymentIntent IDs tracked for cleanup.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const PAYMENT_INTENT_CLEANUP_OPTION_KEY = 'forminator_stripe_payment_intent_cleanup';
+        /**
+         * Option key prefix for PaymentIntent IDs that already produced an entry.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const CONSUMED_PAYMENT_INTENT_OPTION_PREFIX = 'forminator_stripe_consumed_payment_intent_';
+        /**
+         * Option key for consumed PaymentIntent IDs tracked for cleanup.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const CONSUMED_PAYMENT_INTENT_CLEANUP_OPTION_KEY = 'forminator_stripe_consumed_payment_intent_cleanup';
+        /**
+         * Option key prefix marking a PaymentIntent whose claim is held by a request.
+         *
+         * @since 1.57.2
+         *
+         * @var string
+         */
+        public const PAYMENT_INTENT_CLAIM_HELD_OPTION_PREFIX = 'forminator_stripe_payment_intent_claim_held_';
+        /**
+         * Checkout Sessions claimed by this request, keyed by Checkout Session ID.
+         *
+         * The value tells whether the entry reached storage, which decides if the session is
+         * recorded as consumed or handed back for a retry when the submission ends.
+         *
+         * @since 1.57.2
+         *
+         * @var array
+         */
+        private static $claimed_checkout_sessions = array();
+        /**
+         * PaymentIntents claimed by this request, keyed by PaymentIntent ID.
+         *
+         * The value tells whether the entry reached storage, which decides if the PaymentIntent
+         * is recorded as consumed or handed back for a retry when the submission ends.
+         *
+         * @since 1.57.2
+         *
+         * @var array
+         */
+        private static $claimed_payment_intents = array();
+        /**
          * Name
          *
          * @var string
@@ -124778,7 +124856,147 @@ namespace {
         {
         }
         /**
+         * Settle a PaymentIntent claimed by this request.
+         *
+         * The PaymentIntent is only recorded as consumed once its entry reached storage. When
+         * the submission failed before that, the pending marker is handed back so the customer
+         * can retry the payment they already made.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return void
+         */
+        private static function settle_payment_intent($intent_id)
+        {
+        }
+        /**
+         * Claim the pending PaymentIntent marker for the current request.
+         *
+         * The delete_option() call only reports success for the request that actually removed
+         * the row, so concurrent submissions of the same PaymentIntent cannot all claim it.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return bool
+         */
+        private static function claim_pending_payment_intent($intent_id): bool
+        {
+        }
+        /**
+         * Check for a PaymentIntent this release never gave a pending marker.
+         *
+         * Releases before the marker existed tracked pending PaymentIntents only as values in
+         * a single option, so one created back then still has to be claimable exactly once.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return bool
+         */
+        private static function is_untracked_payment_intent($intent_id): bool
+        {
+        }
+        /**
+         * Take the single use lock for a PaymentIntent claim.
+         *
+         * The unique index on option_name makes this insert fail for anyone racing us, so only
+         * one request can ever hold the claim for a given PaymentIntent.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return bool
+         */
+        private static function hold_payment_intent_claim($intent_id): bool
+        {
+        }
+        /**
+         * Build the option key marking a held PaymentIntent claim.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return string
+         */
+        private static function get_payment_intent_claim_held_option_key($intent_id): string
+        {
+        }
+        /**
+         * Store a pending PaymentIntent marker.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @param bool   $force     Re-arm even while a claim is held, used by settle failure.
+         * @return void
+         */
+        private static function set_pending_payment_intent($intent_id, $force = \false)
+        {
+        }
+        /**
+         * Remove a PaymentIntent from local tracking once it produced an entry.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return void
+         */
+        private static function remove_pending_payment_intent($intent_id)
+        {
+        }
+        /**
+         * Check whether a PaymentIntent ID already produced an entry.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return bool
+         */
+        private static function is_consumed_payment_intent($intent_id): bool
+        {
+        }
+        /**
+         * Record a PaymentIntent ID as consumed so it can never be replayed.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return void
+         */
+        private static function mark_payment_intent_consumed($intent_id)
+        {
+        }
+        /**
+         * Build the option key for a pending PaymentIntent ID.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return string
+         */
+        private static function get_payment_intent_option_key($intent_id): string
+        {
+        }
+        /**
+         * Build the option key for a consumed PaymentIntent ID.
+         *
+         * @since 1.57.2
+         *
+         * @param string $intent_id PaymentIntent ID.
+         * @return string
+         */
+        private static function get_consumed_payment_intent_option_key($intent_id): string
+        {
+        }
+        /**
          * Check if checkout session is valid
+         *
+         * The pending marker is claimed here, before the entry is created, so two concurrent
+         * submissions of the same Checkout Session cannot both be accepted. The session is
+         * recorded as consumed later, in settle_checkout_session(), once the entry reaches
+         * storage.
          *
          * @since 1.56
          *
@@ -124786,6 +125004,82 @@ namespace {
          * @return bool
          */
         public static function is_valid_checkout_session($session_id): bool
+        {
+        }
+        /**
+         * Settle a Checkout Session claimed by this request.
+         *
+         * The session is only recorded as consumed once its entry reached storage. When the
+         * submission failed before that, the pending marker is handed back so the customer can
+         * retry the payment they already made.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return void
+         */
+        private static function settle_checkout_session($session_id)
+        {
+        }
+        /**
+         * Check whether a Checkout Session may still be claimed for entry creation.
+         *
+         * Unlike is_valid_checkout_session() this never consumes the marker, so a payment
+         * that has not settled yet can still be retried.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return bool
+         */
+        private static function is_claimable_checkout_session($session_id): bool
+        {
+        }
+        /**
+         * Claim the pending Checkout Session marker for the current request.
+         *
+         * The delete_option() call only reports success for the request that actually removed
+         * the row, so concurrent submissions of the same Checkout Session cannot all claim it.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return bool
+         */
+        private static function claim_pending_checkout_session($session_id): bool
+        {
+        }
+        /**
+         * Check whether a Checkout Session ID already produced an entry.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return bool
+         */
+        public static function is_consumed_checkout_session($session_id): bool
+        {
+        }
+        /**
+         * Record a Checkout Session ID as consumed so it can never be replayed.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return void
+         */
+        private static function mark_checkout_session_consumed($session_id)
+        {
+        }
+        /**
+         * Build the option key for a consumed Checkout Session ID.
+         *
+         * @since 1.57.2
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return string
+         */
+        private static function get_consumed_checkout_session_option_key($session_id): string
         {
         }
         /**
@@ -124868,6 +125162,29 @@ namespace {
          * @return void
          */
         public function cleanup_checkout_sessions()
+        {
+        }
+        /**
+         * Remove abandoned pending PaymentIntent markers and expired consumed PaymentIntent IDs.
+         *
+         * @since 1.57.2
+         *
+         * @return void
+         */
+        private static function cleanup_payment_intents()
+        {
+        }
+        /**
+         * Remove expired entries from the consumed Checkout Session ledger.
+         *
+         * Consumed IDs are retained far longer than pending markers because a completed
+         * Checkout Session stays replayable on Stripe's side.
+         *
+         * @since 1.57.2
+         *
+         * @return void
+         */
+        private static function cleanup_consumed_checkout_sessions()
         {
         }
         /**
