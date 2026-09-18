@@ -122975,6 +122975,20 @@ namespace {
         {
         }
         /**
+         * Get payment description with merge tags applied.
+         *
+         * PayPal limits purchase unit descriptions to 127 characters.
+         *
+         * @since 1.58.0
+         *
+         * @param array $field Field.
+         *
+         * @return string
+         */
+        public function get_payment_description($field)
+        {
+        }
+        /**
          * Get payment amount
          *
          * @since 1.7
@@ -149033,6 +149047,20 @@ namespace {
          * @return array
          */
         public function get_pagination_field()
+        {
+        }
+        /**
+         * Filter CSS classes of a forminator-row wrapper.
+         *
+         * @since 1.58.0
+         *
+         * @param string $classes Row CSS classes.
+         * @param array  $fields  Row fields.
+         * @param array  $wrapper Wrapper data. Empty for submit and PayPal rows.
+         *
+         * @return string
+         */
+        private function filter_row_classes($classes, $fields, $wrapper = array())
         {
         }
         /**
