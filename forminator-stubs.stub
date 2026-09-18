@@ -84083,6 +84083,21 @@ namespace {
         {
         }
         /**
+         * Sanitize posted current_url
+         *
+         * Normalize with esc_url_raw() and strip_shortcodes(). Do not strip raw '['/']'
+         * so query-array params and IPv6 URL literals stay intact.
+         *
+         * @since 1.57.3
+         *
+         * @param array $post_data Posted data.
+         *
+         * @return array
+         */
+        protected static function sanitize_post_current_url($post_data)
+        {
+        }
+        /**
          * Remove the Form UID in the element_id of Ajax multi-upload fields
          *
          * @since 1.18.0
@@ -88623,6 +88638,18 @@ namespace {
         {
         }
         /**
+         * Recursively sanitize data that the caller has already unslashed.
+         *
+         * @param array  $data Data (already unslashed).
+         * @param string $current_key Current key.
+         * @param bool   $force Force sanitization.
+         *
+         * @return array|string
+         */
+        private static function sanitize_array_recursive($data, $current_key = '', $force = \false)
+        {
+        }
+        /**
          * Recursively sanitize html data
          *
          * @param array $data Data.
@@ -89556,6 +89583,20 @@ namespace {
     class Forminator_Geo
     {
         /**
+         * Check whether an IP address falls inside a CIDR range
+         *
+         * Supports IPv4 and IPv6. A range without a prefix is a single address.
+         *
+         * @since 1.57.3
+         * @param string $ip - the ip to check.
+         * @param string $range - the range in CIDR notation. Eg 127.0.0.0/24 or 2400:cb00::/32.
+         *
+         * @return bool
+         */
+        private static function ip_in_range($ip, $range)
+        {
+        }
+        /**
          * Validates that the IP that made the request is from cloudflare
          *
          * @since 1.0
@@ -89567,37 +89608,38 @@ namespace {
         {
         }
         /**
-         * Check if the cloudflare IP is in range
+         * Check if an address may set the client IP forwarding headers
          *
-         * @since 1.0
-         * @param string $ip - the current IP.
-         * @param string $range - the allowed range of cloudflare ips.
+         * Configure public proxies with the FORMINATOR_TRUSTED_PROXIES constant - a
+         * comma separated list of IPs or CIDR ranges - or the forminator_trusted_proxies
+         * filter. Private and reserved addresses are trusted by default since requests
+         * from those were relayed by local infrastructure, never straight from the web.
+         *
+         * @since 1.57.3
+         * @param string $ip - the ip to check.
          *
          * @return bool
          */
-        private static function cloudflare_ip_in_range($ip, $range)
+        private static function is_trusted_proxy($ip)
         {
         }
         /**
-         * Check if there are any cloudflare headers in the request
+         * Get the client IP forwarded by a trusted proxy
          *
-         * @since 1.0
-         * @return bool
-         */
-        private static function cloudflare_requests_check()
-        {
-        }
-        /**
-         * Check if the request is from cloudflare. If it is, we get the IP
+         * X-Forwarded-For grows left to right, so it is walked from the right dropping
+         * our own proxies until the first address we did not append ourselves.
          *
-         * @since 1.0
-         * @return bool
+         * @since 1.57.3
+         * @return string Empty when no usable address was forwarded.
          */
-        private static function is_cloudflare()
+        private static function get_forwarded_ip()
         {
         }
         /**
          * A shorhand function to get user IP
+         *
+         * REMOTE_ADDR is used unless the host that opened the connection is a Cloudflare
+         * edge or a trusted proxy, in which case the address it forwarded is used.
          *
          * @since 1.0
          * @return mixed|string
@@ -123377,6 +123419,17 @@ namespace {
         {
         }
         /**
+         * Custom meta keys allowed by the Post Data field settings.
+         *
+         * @since 1.57.3
+         *
+         * @param array $field Field settings.
+         * @return string[]
+         */
+        private function get_allowed_custom_meta_keys($field)
+        {
+        }
+        /**
          * Set anonymous author
          *
          * @return int|mixed|WP_Error
@@ -147346,9 +147399,37 @@ namespace {
         /**
          * Draft link email submission
          *
+         * Builds the draft link and retention period server-side from the stored draft.
+         * Recipient comes from the send-draft form (same pattern as admin resend).
+         * A one-time send token is consumed on use and rotated after success.
+         *
          * @since 1.17.0
          */
         public function submit_email_draft_link()
+        {
+        }
+        /**
+         * Transient key for the one-time draft email send token.
+         *
+         * @param string $draft_id Draft ID.
+         *
+         * @since 1.57.3
+         *
+         * @return string
+         */
+        public static function get_draft_email_token_key($draft_id)
+        {
+        }
+        /**
+         * Issue (or replace) a one-time token used to send the draft resume email.
+         *
+         * @param string $draft_id Draft ID.
+         *
+         * @since 1.57.3
+         *
+         * @return string
+         */
+        public static function issue_draft_email_token($draft_id)
         {
         }
     }
@@ -157409,6 +157490,21 @@ namespace {
      * @return bool
      */
     function forminator_is_allowed_rich_textarea_class_attribute($class_value)
+    {
+    }
+    /**
+     * Check whether a URL attribute value is safe for public rich-text admin output.
+     *
+     * Kses keeps entity-encoded values verbatim, so client-side code can decode them
+     * back into a breakout. Legitimate URLs percent-encode these, so reject any value
+     * that decodes to an angle bracket, quote or backtick.
+     *
+     * @since 1.57.3
+     *
+     * @param string $url_value URL attribute value.
+     * @return bool
+     */
+    function forminator_is_allowed_rich_textarea_url_attribute($url_value)
     {
     }
     /**
