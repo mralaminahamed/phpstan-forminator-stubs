@@ -144596,19 +144596,24 @@ namespace {
          * Load entry by draft_id
          *
          * @param int $draft_id - the draft id.
+         * @param int $form_id - optional, limit to drafts of this form.
          *
          * @return bool|mixed
          * @since 1.17.0
+         * @since 1.58.0 Added $form_id param.
          */
-        public function get_entry_id_by_draft_id($draft_id)
+        public function get_entry_id_by_draft_id($draft_id, $form_id = 0)
         {
         }
         /**
          * Delete previous draft
          *
+         * Only a draft of this entry's form is deleted.
+         *
          * @param string $previous_draft - draft ID of previously saved draft.
          *
          * @since 1.17.0
+         * @since 1.58.0 Limited to drafts of this entry's form.
          */
         public function delete_previous_draft($previous_draft)
         {
@@ -150240,6 +150245,14 @@ namespace {
          */
         private $mail_sender;
         /**
+         * User the site is about to be created for.
+         *
+         * Only set while Core validates the address right before the site is created.
+         *
+         * @var WP_User|null
+         */
+        private $site_owner = \null;
+        /**
          * Forminator_CForm_Front_User_Registration constructor
          */
         public function __construct()
@@ -150295,7 +150308,7 @@ namespace {
          * @param array                       $custom_form Custom form.
          * @param Forminator_Form_Entry_Model $entry Form entry model.
          *
-         * @return bool|void
+         * @return bool|string|void
          */
         public function handle_user_activation($user_data, $custom_form, $entry)
         {
@@ -150392,11 +150405,62 @@ namespace {
          *
          * @param array                 $validate Validate.
          * @param Forminator_Form_Model $custom_form Form model.
+         * @param array                 $prepared_data Submitted data.
          * @param bool                  $is_approve Is approve.
          *
          * @return array
          */
-        public function multisite_validation($validate, $custom_form, $is_approve)
+        public function multisite_validation($validate, $custom_form, $prepared_data = array(), $is_approve = \false)
+        {
+        }
+        /**
+         * Validate the requested site address and title with WordPress Core.
+         *
+         * Core's wpmu_validate_blog_signup() is the authoritative check: it rejects illegal,
+         * reserved, too short, numeric only and already taken names, and names that collide with
+         * a page on the network's main site.
+         *
+         * @since 1.58.0
+         *
+         * @param string $blog_address Requested site name.
+         * @param string $blog_title   Requested site title.
+         * @param int    $owner_id     User the site is created for. Only set for the final check
+         *                             made right before wpmu_create_blog().
+         *
+         * @return string Error message, empty string when the site data is valid.
+         */
+        private function get_site_signup_error($blog_address, $blog_title, $owner_id = 0)
+        {
+        }
+        /**
+         * Don't treat the site owner's own login as a taken site name.
+         *
+         * Core only allows that when the login matches the requested name exactly, but the address
+         * is lower cased before it is validated, so the owner is matched by Id instead.
+         *
+         * @since 1.58.0
+         *
+         * @param int|false $user_id User Id found for the login, false when there is none.
+         *
+         * @return int|false
+         */
+        public function ignore_site_owner_username($user_id)
+        {
+        }
+        /**
+         * Hide the owner's own pending signup from wpmu_validate_blog_signup().
+         *
+         * Core reserves a domain and path while a signup for it is pending, and deletes that signup
+         * once it is over two days old. Both are wrong for the signup that is being activated, so
+         * that one row is excluded from the lookup. A signup reserved by anyone else still blocks.
+         *
+         * @since 1.58.0
+         *
+         * @param string $query Database query.
+         *
+         * @return string
+         */
+        public function skip_site_owner_signup_lookup($query)
         {
         }
         /**
@@ -150446,9 +150510,10 @@ namespace {
          * Replace site data
          *
          * @param array $setting Settings.
+         * @param array $submitted_data Submitted data. Defaults to the currently prepared data.
          * @return array
          */
-        private function replace_site_data($setting)
+        private function replace_site_data($setting, $submitted_data = array())
         {
         }
         /**
@@ -155970,10 +156035,11 @@ namespace {
      * Used for sanitizing form integration settings description field.
      *
      * @param array $fields Fields.
+     * @param bool  $admin_settings Is admin settings.
      *
      * @return mixed
      */
-    function forminator_sanitize_array_field($fields)
+    function forminator_sanitize_array_field($fields, $admin_settings = \false)
     {
     }
     /**
@@ -157533,6 +157599,17 @@ namespace {
      * @return bool
      */
     function forminator_is_allowed_rich_textarea_url_attribute($url_value)
+    {
+    }
+    /**
+     * Filter value for submissions page. Allow only a few tags to avoid XSS issues.
+     *
+     * @since 1.58
+     *
+     * @param string $value Value.
+     * @return string
+     */
+    function forminator_submissions_value_filter($value)
     {
     }
     /**
