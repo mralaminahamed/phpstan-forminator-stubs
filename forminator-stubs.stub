@@ -3732,6 +3732,14 @@ namespace {
     class Forminator_Aweber_Form_Hooks extends \Forminator_Integration_Form_Hooks
     {
         /**
+         * Subscribers added per submission, keyed by entry ID, list ID and email.
+         *
+         * Static, as each connection has its own hooks instance.
+         *
+         * @var array
+         */
+        private static $added_subscribers = array();
+        /**
          * Return custom entry fields
          *
          * @param array $submitted_data Submitted data.
@@ -3746,15 +3754,16 @@ namespace {
          *
          * @since 1.0 AWeber Integration
          *
-         * @param string $connection_id Connection Id.
-         * @param array  $submitted_data Submitted data.
-         * @param array  $connection_settings Connection settings.
-         * @param array  $form_entry_fields Form entry fields.
+         * @param string                           $connection_id Connection Id.
+         * @param array                            $submitted_data Submitted data.
+         * @param array                            $connection_settings Connection settings.
+         * @param array                            $form_entry_fields Form entry fields.
+         * @param Forminator_Form_Entry_Model|null $entry Entry.
          *
          * @return array `is_sent` true means its success send data to AWeber, false otherwise.
          * @throws Forminator_Integration_Exception Throws Integration Exception.
          */
-        private function get_status_on_add_subscriber($connection_id, $submitted_data, $connection_settings, $form_entry_fields)
+        private function get_status_on_add_subscriber($connection_id, $submitted_data, $connection_settings, $form_entry_fields, $entry)
         {
         }
     }
@@ -3875,6 +3884,14 @@ namespace {
     class Forminator_Aweber_Quiz_Hooks extends \Forminator_Integration_Quiz_Hooks
     {
         /**
+         * Subscribers added per submission, keyed by entry ID, list ID and email.
+         *
+         * Static, as each connection has its own hooks instance.
+         *
+         * @var array
+         */
+        private static $added_subscribers = array();
+        /**
          * Return custom entry fields
          *
          * @param array $submitted_data Submitted data.
@@ -3889,15 +3906,16 @@ namespace {
          *
          * @since 1.0 AWeber Integration
          *
-         * @param string $connection_id Connection Id.
-         * @param array  $submitted_data Submitted data.
-         * @param array  $connection_settings Connection settings.
-         * @param array  $form_entry_fields Form entry fields.
+         * @param string                           $connection_id Connection Id.
+         * @param array                            $submitted_data Submitted data.
+         * @param array                            $connection_settings Connection settings.
+         * @param array                            $form_entry_fields Form entry fields.
+         * @param Forminator_Form_Entry_Model|null $entry Entry.
          *
          * @return array `is_sent` true means its success send data to AWeber, false otherwise.
          * @throws Forminator_Integration_Exception Throws Integration Exception.
          */
-        private function get_status_on_add_subscriber($connection_id, $submitted_data, $connection_settings, $form_entry_fields)
+        private function get_status_on_add_subscriber($connection_id, $submitted_data, $connection_settings, $form_entry_fields, $entry)
         {
         }
     }
@@ -4168,6 +4186,38 @@ namespace {
          * @return bool
          */
         public function is_allow_multi_on_quiz()
+        {
+        }
+        /**
+         * Check whether a submission may update an existing subscriber.
+         *
+         * Only the WordPress user with the subscriber's email may. Account emails are not always verified,
+         * so sites can tighten this with the filter.
+         *
+         * @since 1.58.1
+         *
+         * @param string                           $email Submitted email.
+         * @param object                           $subscriber Existing subscriber.
+         * @param int                              $module_id Module ID.
+         * @param string                           $connection_id Connection ID.
+         * @param Forminator_Form_Entry_Model|null $entry Entry.
+         *
+         * @return bool
+         */
+        public function can_update_subscriber($email, $subscriber, $module_id, $connection_id, $entry = \null)
+        {
+        }
+        /**
+         * Get the value each choice option submits when chosen alone.
+         *
+         * @since 1.58.1
+         *
+         * @param array|null $field Field settings.
+         * @param bool       $labels Return raw labels, as stored on lead entries, instead of values.
+         *
+         * @return array
+         */
+        public static function get_choice_option_values($field, $labels = \false)
         {
         }
     }
@@ -82922,12 +82972,20 @@ namespace {
         {
         }
         /**
-         * Get options for radio and selectbox fields
+         * Get options for radio, checkbox and selectbox fields
          *
          * @param array $field Field settings.
          * @return array
          */
         public static function get_options($field)
+        {
+        }
+        /**
+         * Get allowed HTML for choice option labels.
+         *
+         * @return array
+         */
+        protected static function get_choice_label_allowed_html()
         {
         }
         /**
@@ -88981,6 +89039,12 @@ namespace {
          * @var string
          */
         public $file_path = '';
+        /**
+         * File name used for the mail attachment
+         *
+         * @var string
+         */
+        public $file_name = '';
         /**
          * Form type
          *
@@ -128380,7 +128444,7 @@ namespace {
          *
          * @param string $value Value to encrypt.
          *
-         * @return string
+         * @return string Encrypted value, or an empty string on failure.
          */
         public static function encrypt(string $value): string
         {
@@ -128393,6 +128457,14 @@ namespace {
          * @return string
          */
         public static function decrypt(string $value, bool $was_salty = \false): string
+        {
+        }
+        /**
+         * Wipe a string, sodium_compat can't and throws.
+         *
+         * @param mixed $data Data to wipe.
+         */
+        private static function memzero(&$data)
         {
         }
         /**
@@ -165013,14 +165085,16 @@ namespace {
          * @param string      $status Status.
          * @param null|int    $pdf_parent_id PDF parent Id.
          * @param null|string $search Optional search. Added in 1.52.
+         * @param bool        $load_models Whether to build module models. Added in 1.58.1.
          *
          * @return array
          * @since 1.5.4 add optional param per_page
          * @since 1.5.4 add optional param $status
+         * @since 1.58.1 add optional param $load_models
          *
          * @since 1.2
          */
-        public function get_all_paged($current_page = 1, $per_page = \null, $status = '', $pdf_parent_id = \null, $search = '')
+        public function get_all_paged($current_page = 1, $per_page = \null, $status = '', $pdf_parent_id = \null, $search = '', $load_models = \true)
         {
         }
         /**
