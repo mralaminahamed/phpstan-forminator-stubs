@@ -245,15 +245,34 @@ namespace {
          */
         public $is_multi_global = \false;
         /**
-         * Require a nonce before an integration section callback is invoked
+         * Verify the integrations page nonce.
          *
-         * Integrations whose provider redirects back to a pre registered URL cannot
-         * carry a per request nonce and must set this to false.
+         * A missing or invalid nonce fails closed. Callers that cannot carry this
+         * nonce must prove the request another way.
          *
-         * @since 1.58
-         * @var bool
+         * @since 1.58.2
+         *
+         * @return bool
          */
-        public $section_requires_nonce = \true;
+        public function verify_addon_page_nonce()
+        {
+        }
+        /**
+         * Prove a section request that cannot carry the integrations page nonce.
+         *
+         * Pre-registered OAuth redirects cannot include a per-request nonce.
+         * Override this and require that integration's own CSRF proof.
+         * The default fails closed.
+         *
+         * @since 1.58.2
+         *
+         * @param array $query_args Request arguments.
+         *
+         * @return bool
+         */
+        public function validate_section_request($query_args)
+        {
+        }
         /**
          * Wizard steps
          *
@@ -6002,15 +6021,6 @@ namespace {
          */
         protected $_sensitive_keys = array('client_secret');
         /**
-         * Google redirects back to a pre registered URL that cannot carry a per request
-         * nonce, so the section nonce is not required here. CSRF protection for this
-         * flow needs the nonce moved into the OAuth state parameter instead.
-         *
-         * @since 1.58
-         * @var bool
-         */
-        public $section_requires_nonce = \false;
-        /**
          * Forminator_Googlesheet constructor.
          *
          * @since 1.0 Google Sheets Integration
@@ -6166,6 +6176,21 @@ namespace {
          * @return array
          */
         public function register_integration_sections()
+        {
+        }
+        /**
+         * Google's redirect URL is pre-registered and cannot carry the page nonce.
+         *
+         * Require the single-use OAuth state instead, without consuming it.
+         * The authorize callback consumes the state before saving credentials.
+         *
+         * @since 1.58.2
+         *
+         * @param array $query_args Request arguments.
+         *
+         * @return bool
+         */
+        public function validate_section_request($query_args)
         {
         }
         /**
@@ -73460,15 +73485,6 @@ namespace {
          */
         protected $_position = 4;
         /**
-         * HubSpot redirects back to a pre registered URL that cannot carry a per request
-         * nonce, so the section nonce is not required here. CSRF protection for this
-         * flow needs the nonce moved into the OAuth state parameter instead.
-         *
-         * @since 1.58
-         * @var bool
-         */
-        public $section_requires_nonce = \false;
-        /**
          * Forminator_Hubspot constructor.
          *
          * @since 1.0 HubSpot Integration
@@ -73564,6 +73580,20 @@ namespace {
          * @return array
          */
         public function register_integration_sections()
+        {
+        }
+        /**
+         * HubSpot returns through a pre-registered URL that cannot carry the page nonce.
+         *
+         * Require the same callback proof the authorize handler already checks.
+         *
+         * @since 1.58.2
+         *
+         * @param array $query_args Request arguments.
+         *
+         * @return bool
+         */
+        public function validate_section_request($query_args)
         {
         }
         /**
@@ -76566,15 +76596,6 @@ namespace {
          */
         protected $_sensitive_keys = array('client_secret');
         /**
-         * Slack redirects back to a pre registered URL that cannot carry a per request
-         * nonce, so the section nonce is not required here. CSRF protection for this
-         * flow needs the nonce moved into the OAuth state parameter instead.
-         *
-         * @since 1.58
-         * @var bool
-         */
-        public $section_requires_nonce = \false;
-        /**
          * Forminator_Slack constructor.
          *
          * @since 1.0 Slack Integration
@@ -76720,6 +76741,21 @@ namespace {
          * @return array
          */
         public function register_integration_sections()
+        {
+        }
+        /**
+         * Slack's redirect URL is pre-registered and cannot carry the page nonce.
+         *
+         * Require the single-use OAuth state instead, without consuming it.
+         * The authorize callback consumes the state before saving credentials.
+         *
+         * @since 1.58.2
+         *
+         * @param array $query_args Request arguments.
+         *
+         * @return bool
+         */
+        public function validate_section_request($query_args)
         {
         }
         /**
@@ -88719,6 +88755,10 @@ namespace {
          * Workaround for Gutenberg not parsing shortcodes inside Synced Patterns
          * (formerly Reusable Blocks) when used in Block Editor Page Templates.
          *
+         * Limited to allowed block types (Synced Patterns / `core/block` by default)
+         * and expands only Forminator shortcodes so attacker-controlled block output
+         * (search titles, comments, etc.) cannot arm do_shortcode() for unrelated tags.
+         *
          * @since 1.54.0
          *
          * @param string $block_content The rendered block content.
@@ -89528,6 +89568,21 @@ namespace {
          * @since 1.53.0
          */
         private function forminator_get_csv_export_delimiter()
+        {
+        }
+        /**
+         * Delete leftover scheduled-export CSVs from wp-content/uploads/forminator/.
+         *
+         * Older versions always wrote exports as `{form-slug}-{ymdHis}.csv` under
+         * `{uploads}/forminator/`, not the custom upload root from settings, and could fail
+         * to remove every file. Scheduled exports now use private temp files; this removes
+         * any files still left in that fixed directory.
+         *
+         * @since 1.58.2
+         *
+         * @return int Number of files deleted.
+         */
+        public static function cleanup_leftover_public_export_files()
         {
         }
     }
@@ -170603,6 +170658,22 @@ namespace {
         {
         }
         /**
+         * Print the javascript that initiates `forminatorFront` for a single rendered module
+         *
+         * Elementor popups drop their markup on init and rebuild it from a stored copy on every
+         * opening, so a module inside one skips the direct init and is initialized on the live
+         * copy instead, otherwise its handlers stay bound to nodes no longer in the page.
+         *
+         * @since 1.58.2
+         *
+         * @param int|string $id        Module id.
+         * @param int|string $render_id Render id.
+         * @param array      $options   Front init options.
+         */
+        protected function print_front_init_script($id, $render_id, $options)
+        {
+        }
+        /**
          * Initiate `forminatorFront` front javascript for rendered module(s)
          *
          * @since 1.0
@@ -171113,6 +171184,14 @@ namespace {
          */
         private static $paypal_forms = array();
         /**
+         * PayPal SDK namespaces, keyed by script handle.
+         *
+         * @since 1.58.2
+         *
+         * @var array
+         */
+        private static $paypal_sdk_namespaces = array();
+        /**
          * Inline rules
          *
          * @var string
@@ -171261,6 +171340,34 @@ namespace {
          * @return string
          */
         public function paypal_script_argument($script)
+        {
+        }
+        /**
+         * Get the PayPal SDK of the form.
+         *
+         * The SDK only works with the currency, client ID and locale of its URL, so each URL
+         * gets its own namespace and handle, shared by the forms using it.
+         *
+         * @since 1.58.2
+         *
+         * @return array SDK src, handle and namespace.
+         */
+        public function get_paypal_sdk()
+        {
+        }
+        /**
+         * Add the namespace to the PayPal SDK tag.
+         *
+         * The data-uid is required too, the one the SDK generates can collide between namespaces.
+         *
+         * @since 1.58.2
+         *
+         * @param string $tag    Script tag.
+         * @param string $handle Script handle.
+         *
+         * @return string
+         */
+        public static function add_paypal_sdk_namespace($tag, $handle)
         {
         }
         /**
@@ -172500,6 +172607,16 @@ namespace {
          * @return bool
          */
         private function check_activation_method($method)
+        {
+        }
+        /**
+         * Check if a site should be created for the form
+         *
+         * @param array $settings Form settings.
+         *
+         * @return bool
+         */
+        private function should_create_site($settings)
         {
         }
         /**
@@ -177219,10 +177336,11 @@ namespace {
      * @param string                 $state      OAuth state from the callback request.
      * @param string                 $global_id  Multi-global integration ID.
      * @param string                 $identifier Multi-global integration identifier.
+     * @param bool                   $consume    Whether to delete the state after reading it.
      *
      * @return array|false Bound context on success, false on failure.
      */
-    function forminator_integration_validate_oauth_state($addon, $state, $global_id = '', $identifier = '')
+    function forminator_integration_validate_oauth_state($addon, $state, $global_id = '', $identifier = '', $consume = \true)
     {
     }
     /**
@@ -178140,6 +178258,16 @@ namespace {
      * @return bool
      */
     function forminator_is_site_registration_enabled()
+    {
+    }
+    /**
+     * Check if a registration form is allowed to register new users.
+     *
+     * @param array $settings Form settings.
+     *
+     * @return bool
+     */
+    function forminator_can_register_user($settings = array())
     {
     }
     /**
