@@ -5382,15 +5382,16 @@ namespace {
          *
          * @since 1.0 Google Sheets Integration
          *
-         * @param string $connection_id Connection Id.
-         * @param array  $submitted_data Submitted data.
-         * @param array  $connection_settings Connection settings.
-         * @param array  $form_entry_fields Form entry fields.
+         * @param string                           $connection_id Connection Id.
+         * @param array                            $submitted_data Submitted data.
+         * @param array                            $connection_settings Connection settings.
+         * @param array                            $form_entry_fields Form entry fields.
+         * @param Forminator_Form_Entry_Model|null $entry Entry.
          *
          * @return array `is_sent` true means its success send data to Google Sheets, false otherwise.
          * @throws Forminator_Integration_Exception Throws Integration Exception.
          */
-        public function get_status_on_create_row($connection_id, $submitted_data, $connection_settings, $form_entry_fields)
+        public function get_status_on_create_row($connection_id, $submitted_data, $connection_settings, $form_entry_fields, $entry)
         {
         }
         /**
@@ -76961,6 +76962,24 @@ namespace {
         {
         }
         /**
+         * Cursor-paginate Slack list endpoints.
+         *
+         * Slack Web API uses `response_metadata.next_cursor` for pagination on list
+         * endpoints. This helper keeps requesting pages until `next_cursor` is empty
+         * and aggregates the returned array property into a single list.
+         *
+         * @since 1.58.3
+         *
+         * @param string $path       Endpoint path.
+         * @param array  $args       Request args.
+         * @param string $collection Response property name to aggregate (e.g. `channels`, `members`).
+         *
+         * @return array|mixed|object
+         */
+        private function request_paginated_list($path, $args, $collection)
+        {
+        }
+        /**
          * Get Users / members List
          *
          * @since 1.0 Slack Integration
@@ -80092,6 +80111,38 @@ namespace {
          * @since 1.0
          */
         public function __construct()
+        {
+        }
+        /**
+         * Load dashboard summary widget
+         *
+         * @since 1.58.3
+         */
+        public function load_dashboard_summary_widget()
+        {
+        }
+        /**
+         * Load dashboard recent form widget
+         *
+         * @since 1.58.3
+         */
+        public function load_dashboard_recent_form_widget()
+        {
+        }
+        /**
+         * Load dashboard recent poll widget
+         *
+         * @since 1.58.3
+         */
+        public function load_dashboard_recent_poll_widget()
+        {
+        }
+        /**
+         * Load dashboard recent quiz widget
+         *
+         * @since 1.58.3
+         */
+        public function load_dashboard_recent_quiz_widget()
         {
         }
         /**
@@ -83795,7 +83846,7 @@ namespace {
         {
         }
         /**
-         * * Get formatted amount for Stripe and PayPal fields
+         * Get formatted amount for Stripe and PayPal fields
          *
          * @param array        $field Field.
          * @param string|array $amount_data Amount Data.
@@ -83815,6 +83866,48 @@ namespace {
          * @return string
          */
         public function get_richtext_editor_script($id, $media_buttons = \false)
+        {
+        }
+        /**
+         * Get validated max selections
+         *
+         * Calculates the validated max selections value based on field settings and available options.
+         *
+         * @since 1.58.3
+         *
+         * @param array $field Field settings.
+         * @return int Validated max selections value, or 0 if limit is not enabled.
+         */
+        protected function get_validated_max_selections($field)
+        {
+        }
+        /**
+         * Get max selections error message
+         *
+         * Returns the error message for max selections validation.
+         *
+         * @since 1.58.3
+         *
+         * @param array  $field Field settings.
+         * @param int    $validated_max Validated max selections value.
+         * @param string $filter_name Filter name for the error message.
+         * @return string Error message.
+         */
+        protected function get_max_selections_error_message($field, $validated_max, $filter_name = 'forminator_field_max_selections_validation_message')
+        {
+        }
+        /**
+         * Get required validation message
+         *
+         * Returns the required field validation message with appropriate filter.
+         *
+         * @since 1.58.3
+         *
+         * @param array  $field Field settings.
+         * @param string $filter_name Filter name for the error message.
+         * @return string Required validation message.
+         */
+        protected function get_required_validation_message($field, $filter_name)
         {
         }
     }
@@ -84392,6 +84485,16 @@ namespace {
          * Get nonce to avoid Static cache
          */
         public function get_nonce()
+        {
+        }
+        /**
+         * Check if we can trigger integrations
+         *
+         * @param Forminator_Form_Entry_Model $entry Form Entry.
+         *
+         * @return bool
+         */
+        public function can_trigger_integrations($entry)
         {
         }
     }
@@ -89166,12 +89269,34 @@ namespace {
         {
         }
         /**
+         * Re-evaluate the export schedule after settings change.
+         *
+         * @since 1.58.3
+         */
+        public function reschedule_entries_exporter()
+        {
+        }
+        /**
          * Set up the schedule
+         *
+         * Only schedule when at least one export schedule is enabled. Otherwise unschedule
+         * so unused sites do not run forminator_send_export every minute.
          *
          * @since 1.0
          * @since 1.27 Change from WP cron to Action Scheduler
+         * @since 1.58.3 Only schedule when an export is enabled
          */
         public function schedule_entries_exporter()
+        {
+        }
+        /**
+         * Whether any scheduled export is enabled and has a recipient.
+         *
+         * @since 1.58.3
+         *
+         * @return bool
+         */
+        public function has_enabled_export_schedule()
         {
         }
         /**
@@ -91081,9 +91206,21 @@ namespace {
         {
         }
         /**
+         * Re-evaluate the report schedule after settings change.
+         *
+         * @since 1.58.3
+         */
+        public function reschedule_reports()
+        {
+        }
+        /**
          * Set up the schedule
          *
+         * Only schedule when at least one report is active. Otherwise unschedule so unused
+         * sites do not run forminator_process_report every minute.
+         *
          * @since 1.0
+         * @since 1.58.3 Only schedule when a report is active
          */
         public function schedule_reports()
         {
@@ -122091,6 +122228,21 @@ namespace {
         {
         }
         /**
+         * Get the valid entries of an allowlist or denylist.
+         *
+         * An entry is an email address or a part of one, with * as a wildcard,
+         * e.g. user@example.com, @example.com, *.com, admin@*, hr@*.com. Other entries are dropped.
+         *
+         * @since 1.58.3
+         *
+         * @param mixed $email_list Comma separated list.
+         *
+         * @return array
+         */
+        public static function get_email_filter_list($email_list): array
+        {
+        }
+        /**
          * Sanitize data
          *
          * @since 1.0.2
@@ -124878,6 +125030,22 @@ namespace {
          */
         public const PAYMENT_INTENT_CLAIM_HELD_OPTION_PREFIX = 'forminator_stripe_payment_intent_claim_held_';
         /**
+         * Option key prefix marking a Checkout Session whose claim is held by a request.
+         *
+         * @since 1.58.3
+         *
+         * @var string
+         */
+        public const CHECKOUT_SESSION_CLAIM_HELD_OPTION_PREFIX = 'forminator_stripe_checkout_session_claim_held_';
+        /**
+         * Checkout Session metadata key holding the payment owner of the browser that created it.
+         *
+         * @since 1.58.3
+         *
+         * @var string
+         */
+        public const PAYMENT_OWNER_METADATA_KEY = 'forminator_payment_owner';
+        /**
          * Cookie tying a Stripe payment to the browser that started it.
          *
          * @var string
@@ -125651,6 +125819,19 @@ namespace {
         {
         }
         /**
+         * Check that the current browser created the Checkout Session, using its Stripe metadata.
+         *
+         * Sessions without an owner never match.
+         *
+         * @since 1.58.3
+         *
+         * @param mixed $session Checkout Session object.
+         * @return bool
+         */
+        public static function is_checkout_session_owner($session): bool
+        {
+        }
+        /**
          * Check if payment intent is valid
          *
          * @param string $intent_id Payment Intent ID.
@@ -125712,6 +125893,19 @@ namespace {
          * @return bool
          */
         private static function hold_payment_intent_claim($intent_id): bool
+        {
+        }
+        /**
+         * Take a single use lock stored as an option.
+         *
+         * The unique index on option_name makes this insert fail for anyone racing us.
+         *
+         * @since 1.58.3
+         *
+         * @param string $option_name Option name of the lock.
+         * @return bool
+         */
+        private static function hold_claim($option_name): bool
         {
         }
         /**
@@ -125868,6 +126062,17 @@ namespace {
          * @return string
          */
         private static function get_consumed_checkout_session_option_key($session_id): string
+        {
+        }
+        /**
+         * Build the option key marking a held Checkout Session claim.
+         *
+         * @since 1.58.3
+         *
+         * @param string $session_id Checkout Session ID.
+         * @return string
+         */
+        private static function get_checkout_session_claim_held_option_key($session_id): string
         {
         }
         /**
@@ -166483,8 +166688,21 @@ namespace {
          *
          * @return array
          * @since 1.5.3
+         * @deprecated since 1.58.3
          */
         public static function get_newer_entry_ids($entry_type, $date_created)
+        {
+        }
+        /**
+         * Get count of entries newer than $date_created
+         *
+         * @param string $entry_type Entry type.
+         * @param string $date_created Created date.
+         *
+         * @return int
+         * @since 1.58.3
+         */
+        public static function count_newer_entries($entry_type, $date_created)
         {
         }
         /**
@@ -166506,8 +166724,21 @@ namespace {
          *
          * @return array
          * @since 1.5.3
+         * @deprecated since 1.58.3
          */
         public static function get_newer_entry_ids_of_form_id($form_id, $date_created)
+        {
+        }
+        /**
+         * Count entries newer than $date_created of form_id
+         *
+         * @param int    $form_id Form Id.
+         * @param string $date_created Created date.
+         *
+         * @return int
+         * @since 1.58.3
+         */
+        public static function count_newer_entries_by_form_id($form_id, $date_created)
         {
         }
         /**
@@ -166963,6 +167194,16 @@ namespace {
          * @since 1.20.0
          */
         public function fetch_all_report()
+        {
+        }
+        /**
+         * Whether any report is currently active.
+         *
+         * @since 1.58.3
+         *
+         * @return bool
+         */
+        public function has_active_reports()
         {
         }
         /**
@@ -174033,11 +174274,8 @@ namespace {
         }
         /**
          * Get field data array
-         *
-         * @param object $entry Entry object.
-         * @return array
          */
-        private static function get_field_data_array($entry)
+        private static function get_field_data_array()
         {
         }
         /**
@@ -176241,6 +176479,20 @@ namespace {
         {
         }
         /**
+         * Convert a field value into a string Akismet can use as comment content.
+         *
+         * Nested values such as File Upload payloads must not be passed to implode(),
+         * which triggers "Array to string conversion" warnings on PHP 8+.
+         *
+         * @since 1.58.3
+         *
+         * @param mixed $value Field value.
+         * @return string
+         */
+        private function get_akismet_content_value($value)
+        {
+        }
+        /**
          * Check if Akismet protection is enabled
          *
          * @param int $id Module ID.
@@ -178237,6 +178489,21 @@ namespace {
     {
     }
     /**
+     * Unschedule a Forminator Action Scheduler action and clear its cache.
+     *
+     * Caches the unscheduled state for 2 hours so unused export/report jobs do not
+     * hit Action Scheduler on every page load. The cache is cleared when scheduling.
+     *
+     * @since 1.58.3
+     *
+     * @param string $action Action name.
+     *
+     * @return void
+     */
+    function forminator_unschedule_action(string $action): void
+    {
+    }
+    /**
      * Check if cloud templates are disabled
      *
      * @return bool
@@ -178341,6 +178608,7 @@ namespace {
      * @since  1.0
      * @since  1.15 Added new supported currencies and removed unsupported
      * @since  1.20 Added JOD
+     * @since  1.58.3 Added GHS
      *
      * @url    Stripe Currencies: https://stripe.com/docs/currencies
      * @url    Unicode hex table: https://gist.github.com/mroyce/a7e37ced540f45104de4cc03224937c7
@@ -178595,6 +178863,18 @@ namespace {
      * @return string
      */
     function forminator_normalize_choice_option_value($value)
+    {
+    }
+    /**
+     * Escape a submitted value for HTML output, keeping only scalar values.
+     *
+     * @since 1.58.3
+     *
+     * @param mixed $value Submitted value, a scalar or a list of scalars.
+     *
+     * @return string|array
+     */
+    function forminator_esc_html_submitted_value($value)
     {
     }
     /**
