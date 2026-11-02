@@ -78945,6 +78945,12 @@ namespace {
         {
         }
         /**
+         * Show error if user does not have permission to connect site to hub
+         */
+        private function show_hub_connector_error()
+        {
+        }
+        /**
          * Show modal when hub connected successfully
          */
         public static function hub_connected_successfully_modal()
@@ -89793,6 +89799,16 @@ namespace {
         {
         }
         /**
+         * Cleanup bindings of PayPal orders that were never submitted.
+         *
+         * @since 1.58.4
+         *
+         * @return void
+         */
+        public function cleanup_paypal_orders()
+        {
+        }
+        /**
          * Schedule delete temp file
          *
          * @since 1.13
@@ -89987,6 +90003,14 @@ namespace {
          * @return string
          */
         public static function get_hub_connect_logo(): string
+        {
+        }
+        /**
+         * Check if current user can manage hub connector
+         *
+         * @return bool
+         */
+        public static function can_manage_hub_connector(): bool
         {
         }
     }
@@ -123504,6 +123528,24 @@ namespace {
     class Forminator_PayPal extends \Forminator_Field
     {
         /**
+         * Option prefix of an order binding.
+         *
+         * @since 1.58.4
+         */
+        public const ORDER_OPTION_PREFIX = 'forminator_paypal_order_';
+        /**
+         * Option key listing order bindings for cleanup.
+         *
+         * @since 1.58.4
+         */
+        public const ORDER_CLEANUP_OPTION_KEY = 'forminator_paypal_order_cleanup';
+        /**
+         * Currencies PayPal takes without decimals.
+         *
+         * @since 1.58.4
+         */
+        public const ZERO_DECIMAL_CURRENCIES = array('HUF', 'JPY', 'TWD');
+        /**
          * Name
          *
          * @var string
@@ -123628,6 +123670,128 @@ namespace {
          * @return array
          */
         public function process_to_entry_data($field)
+        {
+        }
+        /**
+         * Format an amount the way it is sent to PayPal.
+         *
+         * @since 1.58.4
+         *
+         * @param mixed  $amount   Amount.
+         * @param string $currency Currency code.
+         * @return string
+         */
+        public static function format_amount($amount, $currency): string
+        {
+        }
+        /**
+         * Check a PayPal order ID before it is used in an API path.
+         *
+         * @since 1.58.4
+         *
+         * @param mixed $order_id Order ID.
+         * @return bool
+         */
+        private static function is_valid_order_id($order_id): bool
+        {
+        }
+        /**
+         * Store what an order was created for.
+         *
+         * @since 1.58.4
+         *
+         * @param string $order_id Order ID.
+         * @param string $form_id  Form ID.
+         * @param string $mode     Payment mode.
+         * @param mixed  $amount   Amount.
+         * @param string $currency Currency code.
+         * @return bool
+         */
+        public static function store_order_binding($order_id, $form_id, $mode, $amount, $currency): bool
+        {
+        }
+        /**
+         * Check that an order was created for this form, browser and total.
+         *
+         * @since 1.58.4
+         *
+         * @param mixed  $order_id Order ID.
+         * @param string $mode     Payment mode.
+         * @param mixed  $amount   Expected amount.
+         * @param string $currency Expected currency code.
+         * @return string Empty when the order matches, the reason otherwise.
+         */
+        private static function get_order_binding_error($order_id, $mode, $amount, $currency): string
+        {
+        }
+        /**
+         * Claim an order once, only the request that deletes the option succeeds.
+         *
+         * @since 1.58.4
+         *
+         * @param string $order_id Order ID, checked by get_order_binding_error().
+         * @return bool
+         */
+        private static function claim_order_binding($order_id): bool
+        {
+        }
+        /**
+         * Log a rejected order and return the entry data error.
+         *
+         * @since 1.58.4
+         *
+         * @param string $reason   Reason code.
+         * @param mixed  $order_id Order ID.
+         * @param string $mode     Payment mode.
+         * @return array
+         */
+        private static function get_binding_error_entry_data($reason, $order_id, $mode): array
+        {
+        }
+        /**
+         * Remove an order from the cleanup list.
+         *
+         * @since 1.58.4
+         *
+         * @param string $order_id Order ID.
+         * @return void
+         */
+        private static function remove_order_from_cleanup($order_id)
+        {
+        }
+        /**
+         * Delete bindings of orders that were never submitted.
+         *
+         * @since 1.58.4
+         *
+         * @return void
+         */
+        public function cleanup_order_bindings()
+        {
+        }
+        /**
+         * Build the option key of an order binding.
+         *
+         * @since 1.58.4
+         *
+         * @param string $order_id Order ID.
+         * @return string
+         */
+        private static function get_order_option_key($order_id): string
+        {
+        }
+        /**
+         * Get the capture if it completed for the expected total.
+         *
+         * Checks the capture itself, an order can be COMPLETED with a pending or declined capture.
+         *
+         * @since 1.58.4
+         *
+         * @param mixed $response Capture order response.
+         * @param array $field    Field.
+         * @return object|WP_Error
+         */
+        public function get_completed_capture($response, $field)
         {
         }
         /**
@@ -124075,6 +124239,27 @@ namespace {
         {
         }
         /**
+         * Whether the featured-image input has a file that fails the type check.
+         *
+         * @param string $field_name File input name.
+         * @return bool
+         */
+        private function is_invalid_post_image_upload($field_name)
+        {
+        }
+        /**
+         * Map an uploaded featured image to an allowed extension and MIME type.
+         *
+         * Uses wp_check_filetype_and_ext() so the file contents have to match the name.
+         *
+         * @param string $file_name Sanitized file name.
+         * @param mixed  $tmp_name  Uploaded temporary path.
+         * @return array|false Ext and type, or false when the upload is not an allowed image.
+         */
+        private function get_allowed_post_image_filetype($file_name, $tmp_name)
+        {
+        }
+        /**
          * Get default error message.
          *
          * @param array $field Field data.
@@ -124139,6 +124324,20 @@ namespace {
          * @return array|string $data - the data after sanitization
          */
         public function sanitize($field, $data)
+        {
+        }
+        /**
+         * Encode shortcode brackets unless the submitter can edit posts of this type.
+         * Safer than strip_shortcodes(), which turns [[tag]] into a live [tag].
+         *
+         * @since 1.58.4
+         *
+         * @param string $text      Submitted text.
+         * @param string $post_type Post type the field creates.
+         *
+         * @return string
+         */
+        private function neutralize_shortcodes($text, $post_type)
         {
         }
         /**
@@ -126212,6 +126411,22 @@ namespace {
          * @return void
          */
         private static function cleanup_consumed_checkout_sessions()
+        {
+        }
+        /**
+         * Whether a Checkout Session has finished Checkout and may receive the after-payment response.
+         *
+         * The payment-owner cookie only proves which browser started the session. An open/unpaid
+         * session must not disclose thank-you messages, redirect URLs, or other gated content.
+         * Status complete covers paid, no_payment_required, and async unpaid (ACH/SEPA) after the
+         * customer finishes Checkout.
+         *
+         * @since 1.58.4
+         *
+         * @param mixed $session Checkout Session object.
+         * @return bool
+         */
+        public static function is_checkout_session_completed($session): bool
         {
         }
         /**
@@ -168788,6 +169003,12 @@ namespace {
          */
         public static $registration = \null;
         /**
+         * Login waiting for the payment to be confirmed
+         *
+         * @var Forminator_CForm_Front_User_Login|null
+         */
+        private static $deferred_login = \null;
+        /**
          * Plugin instance
          *
          * @var null
@@ -168925,6 +169146,31 @@ namespace {
         {
         }
         /**
+         * Build the pending Checkout validate success payload.
+         *
+         * Pending validate runs before Checkout finishes, so after-payment Behavior
+         * (thank-you / redirect) must not be returned. Login forms still need the
+         * Defender 2FA fields from the original response.
+         *
+         * @param array $response Full handle_form success response.
+         * @return array
+         */
+        private static function get_pending_checkout_validate_success_response($response)
+        {
+        }
+        /**
+         * Keep Defender 2FA fields on pending Checkout validate for login forms.
+         *
+         * Starts from the existing login response and only removes after-payment
+         * Behavior keys. Invalid 2FA still needs its error message.
+         *
+         * @param array $response Full handle_form success response.
+         * @return array
+         */
+        private static function get_pending_checkout_login_validate_response($response)
+        {
+        }
+        /**
          * Add a temporary country code based on currency to prevent errors.
          * Set country code to Austria if currency is Euro,
          * else remove the last letter from currency code to get temporary country code.
@@ -169020,6 +169266,18 @@ namespace {
          * @throws Exception When there is an error.
          */
         private static function maybe_login($entry)
+        {
+        }
+        /**
+         * Sign on the user whose login waited for the payment.
+         *
+         * The payment is already taken, so a failure is only logged.
+         *
+         * @since 1.58.4
+         *
+         * @return void
+         */
+        private static function complete_deferred_login()
         {
         }
         /**
@@ -169167,6 +169425,7 @@ namespace {
          *
          * @param object $entry Entry.
          * @return array|void
+         * @throws Exception When the configured Stripe mode is unavailable.
          */
         private static function handle_stripe($entry)
         {
@@ -169282,6 +169541,19 @@ namespace {
         {
         }
         /**
+         * Fire the Stripe after charge hook for a paid Checkout Session.
+         *
+         * Fires once, when the entry turns active. Subscriptions are left to the add-on.
+         *
+         * @since 1.58.4
+         *
+         * @param array $stripe_data Stripe entry meta with the final transaction ID.
+         * @return void
+         */
+        private static function fire_checkout_after_stripe_charge($stripe_data)
+        {
+        }
+        /**
          * Update hidden fields with submission ID if they exist in the prepared data.
          *
          * @param Forminator_Form_Entry_Model $entry Form Entry.
@@ -169359,6 +169631,26 @@ namespace {
          * @return array
          */
         private function get_response_for_pending_entry()
+        {
+        }
+        /**
+         * Whether a pending Checkout Session may receive the after-payment response.
+         *
+         * @param string     $session_id Checkout Session ID.
+         * @param array|null $stripe_settings Stripe field settings.
+         * @return bool
+         */
+        private function pending_checkout_session_allows_after_payment_response($session_id, $stripe_settings = \null)
+        {
+        }
+        /**
+         * Response when Checkout has not finished yet.
+         *
+         * Keeps the pending session so the owner can complete payment and retry.
+         *
+         * @return array
+         */
+        private static function get_incomplete_checkout_payment_response()
         {
         }
         /**
@@ -170639,11 +170931,13 @@ namespace {
          *
          * @since 1.0
          *
-         * @param array $atts Attributes.
+         * @param array|string $atts    Attributes.
+         * @param string|null  $content Enclosed content.
+         * @param string       $tag     Shortcode tag, empty for direct calls.
          *
          * @return string
          */
-        public function render_shortcode($atts = array())
+        public function render_shortcode($atts = array(), $content = \null, $tag = '')
         {
         }
         /**
@@ -172707,6 +173001,18 @@ namespace {
          */
         public $settings;
         /**
+         * Whether sign on waits for complete_deferred_signon()
+         *
+         * @var bool
+         */
+        private $defer_signon = \false;
+        /**
+         * Checked credentials waiting for sign on
+         *
+         * @var array
+         */
+        private $deferred_signon = array();
+        /**
          * Forminator_CForm_Front_User_Login constructor
          */
         public function __construct()
@@ -172742,6 +173048,26 @@ namespace {
          * @return array
          */
         public function process_login($custom_form, \Forminator_Form_Entry_Model $entry, $field_data_array)
+        {
+        }
+        /**
+         * Check the credentials in process_login() without signing on.
+         *
+         * @since 1.58.4
+         *
+         * @return void
+         */
+        public function defer_signon()
+        {
+        }
+        /**
+         * Sign on the user whose credentials passed process_login().
+         *
+         * @since 1.58.4
+         *
+         * @return WP_User|WP_Error|null Null when nothing waits for sign on.
+         */
+        public function complete_deferred_signon()
         {
         }
         /**
@@ -177944,6 +178270,17 @@ namespace {
     {
     }
     /**
+     * Return if PayPal mode is configured
+     *
+     * @since 1.58.4
+     *
+     * @param string $mode Payment mode (sandbox|live).
+     * @return bool
+     */
+    function forminator_is_paypal_mode_ready($mode)
+    {
+    }
+    /**
      * Check if the Stripe Subscription add-on is installed and meets Forminator's minimum version.
      *
      * @since 1.58.0
@@ -179135,6 +179472,21 @@ namespace {
      * @return mixed
      */
     function forminator_replace_custom_form_data($content, \Forminator_Form_Model $custom_form, \Forminator_Form_Entry_Model $entry, $excluded = array())
+    {
+    }
+    /**
+     * Neutralize merge-tag braces in user-supplied values.
+     *
+     * Submitted field values must not be interpreted as Forminator merge tags when they
+     * are inserted into email bodies or other templates (second-order merge tag injection).
+     *
+     * @since 1.58.4
+     *
+     * @param string $text Text that may contain curly braces.
+     *
+     * @return string
+     */
+    function forminator_neutralize_merge_tags($text)
     {
     }
     /**
